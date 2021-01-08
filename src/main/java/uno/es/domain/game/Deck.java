@@ -1,6 +1,9 @@
 package uno.es.domain.game;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Stack;
 
 import static java.util.Arrays.asList;
 
@@ -10,6 +13,7 @@ public class Deck {
 
     private final Stack<Card> cards;
     private final DeckId deckId;
+    private final List<DeckEvent> getGeneratedEvents = new ArrayList<>();
 
     private Deck(DeckId deckId) {
         this.deckId = deckId;
@@ -17,7 +21,6 @@ public class Deck {
         addZeroCards(CartNumber.ZERO);
         addOneToNineCards();
         addOneToNineCards();
-
     }
 
     private void addOneToNineCards() {
@@ -60,7 +63,7 @@ public class Deck {
         return true;
     }
 
-    public DeckShuffledEvent shuffle() {
+    public void shuffle() {
         Random random = new Random();
         List<Card> shuffledCards = new ArrayList<>();
         for (int currentIndex = cards.size() - 1; currentIndex >= 0; currentIndex--) {
@@ -70,10 +73,15 @@ public class Deck {
         }
         this.cards.clear();
         this.cards.addAll(shuffledCards);
-        return new DeckShuffledEvent(deckId, cards);
+
+        getGeneratedEvents.add(new DeckShuffledEvent(deckId, cards));
     }
 
     public static Deck createNewDeck(DeckId deckId) {
         return new Deck(deckId);
+    }
+
+    public List<DeckEvent> getGeneratedEvents() {
+        return getGeneratedEvents;
     }
 }

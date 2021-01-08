@@ -66,15 +66,15 @@ class DeckUTest {
         }
 
         @Test
-        void return_CardShuffledEvent2() {
+        void add_CardShuffledEvent_to_generatedEvents() {
             // given
             final Deck deck = Deck.createNewDeck(deckId);
 
             // when
-            DeckShuffledEvent event = deck.shuffle();
+            deck.shuffle();
 
             // then
-            assertThat(event).isEqualTo(new DeckShuffledEvent(deckId, deck.getCards()));
+            assertThat(deck.getGeneratedEvents()).usingFieldByFieldElementComparator().containsExactly(new DeckShuffledEvent(deckId, deck.getCards()));
         }
     }
 

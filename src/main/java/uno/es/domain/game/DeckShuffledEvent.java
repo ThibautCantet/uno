@@ -1,11 +1,9 @@
 package uno.es.domain.game;
 
-import uno.es.domain.ddd.Event;
-
 import java.util.List;
 import java.util.Objects;
 
-public class DeckShuffledEvent implements Event {
+public class DeckShuffledEvent implements DeckEvent {
 
     private final DeckId deckId;
     private final List<Card> cards;
