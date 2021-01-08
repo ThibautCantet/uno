@@ -1,4 +1,4 @@
-package uno.es.domain;
+package uno.es.domain.game;
 
 public enum CartNumber {
     ZERO(0),

@@ -1,8 +1,8 @@
 package uno.es.infrastructure;
 
-import uno.es.domain.CardShuffledEvent;
-import uno.es.domain.Deck;
-import uno.es.domain.DeckRepository;
+import uno.es.domain.game.CardShuffledEvent;
+import uno.es.domain.game.Deck;
+import uno.es.domain.game.DeckRepository;
 
 import java.util.List;
 

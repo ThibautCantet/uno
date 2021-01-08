@@ -1,7 +1,9 @@
-package uno.es.domain;
+package uno.es.domain.game;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import uno.es.domain.game.DeckId;
+import uno.es.domain.game.InvalidDeckIdException;
 
 import java.util.UUID;
 

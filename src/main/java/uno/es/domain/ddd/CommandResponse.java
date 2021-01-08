@@ -1,4 +1,4 @@
-package uno.es.domain;
+package uno.es.domain.ddd;
 
 public class CommandResponse<T> {
     private final T value;

@@ -1,6 +1,4 @@
-package uno.es.domain;
-
-import java.util.Objects;
+package uno.es.domain.game;
 
 import static java.util.Optional.ofNullable;
 

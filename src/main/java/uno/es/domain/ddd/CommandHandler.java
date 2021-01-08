@@ -1,4 +1,4 @@
-package uno.es.domain;
+package uno.es.domain.ddd;
 
 public interface CommandHandler<R extends CommandResponse, C extends Command> {
 

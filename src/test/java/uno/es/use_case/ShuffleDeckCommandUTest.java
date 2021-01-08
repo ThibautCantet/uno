@@ -2,7 +2,7 @@ package uno.es.use_case;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import uno.es.domain.DeckId;
+import uno.es.domain.game.DeckId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

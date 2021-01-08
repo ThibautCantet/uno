@@ -2,7 +2,7 @@ package uno.es.infrastructure;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uno.es.domain.Deck;
+import uno.es.domain.game.Deck;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

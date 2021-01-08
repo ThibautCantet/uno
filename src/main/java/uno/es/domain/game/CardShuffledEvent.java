@@ -1,4 +1,6 @@
-package uno.es.domain;
+package uno.es.domain.game;
+
+import uno.es.domain.ddd.Event;
 
 import java.util.Objects;
 

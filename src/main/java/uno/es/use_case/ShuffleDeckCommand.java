@@ -1,7 +1,7 @@
 package uno.es.use_case;
 
-import uno.es.domain.Command;
-import uno.es.domain.DeckId;
+import uno.es.domain.ddd.Command;
+import uno.es.domain.game.DeckId;
 
 public class ShuffleDeckCommand implements Command {
     private final DeckId deckId;

@@ -3,7 +3,8 @@ package uno.es.use_case;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import uno.es.domain.*;
+import uno.es.domain.ddd.CommandResponse;
+import uno.es.domain.game.*;
 
 import java.util.List;
 import java.util.UUID;

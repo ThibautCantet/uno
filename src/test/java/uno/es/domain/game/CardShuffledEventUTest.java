@@ -1,8 +1,9 @@
-package uno.es.domain;
+package uno.es.domain.game;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import uno.es.domain.game.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

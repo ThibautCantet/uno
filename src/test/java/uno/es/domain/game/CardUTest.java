@@ -1,7 +1,11 @@
-package uno.es.domain;
+package uno.es.domain.game;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import uno.es.domain.game.Card;
+import uno.es.domain.game.CartNumber;
+import uno.es.domain.game.Color;
+import uno.es.domain.game.InvalidCardException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;

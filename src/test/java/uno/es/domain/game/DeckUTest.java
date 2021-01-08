@@ -1,8 +1,9 @@
-package uno.es.domain;
+package uno.es.domain.game;
 
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import uno.es.domain.game.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Stack;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static uno.es.domain.Deck.DECK_SIZE;
+import static uno.es.domain.game.Deck.DECK_SIZE;
 
 class DeckUTest {
 

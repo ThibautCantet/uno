@@ -1,4 +1,6 @@
-package uno.es.domain;
+package uno.es.domain.game;
+
+import uno.es.domain.ddd.AggregateId;
 
 import java.util.UUID;
 
