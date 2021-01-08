@@ -6,8 +6,10 @@ import static java.util.Arrays.asList;
 
 public class Deck {
     private final Stack<Card> cards;
+    private final DeckId deckId;
 
-    public Deck() throws InvalidCardException {
+    private Deck(DeckId deckId) throws InvalidCardException {
+        this.deckId = deckId;
         cards = new Stack<>();
         addZeroCards(CartNumber.ZERO);
         addOneToNineCards();
@@ -31,5 +33,15 @@ public class Deck {
 
     public Stack<Card> getCards() {
         return cards;
+    }
+
+    public DeckId getId() {
+        return deckId;
+    }
+
+
+
+    public static Deck createNewDeck() throws InvalidCardException, InvalidDeckIdException {
+        return new Deck(new DeckId());
     }
 }
