@@ -3,7 +3,6 @@ package uno.es.domain.game;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import uno.es.domain.game.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,15 +14,17 @@ import static uno.es.domain.game.Deck.DECK_SIZE;
 
 class DeckUTest {
 
+    private DeckId deckId = new DeckId();
+
     @Nested
     class ConstructorShould {
         @Test
         void initialize_new_aggregate_id() {
             // when
-            final Deck deck = Deck.createNewDeck();
+            final Deck deck = Deck.createNewDeck(deckId);
 
             // then
-            assertThat(deck.getId()).isInstanceOf(DeckId.class);
+            assertThat(deck.getId()).isEqualTo(deckId);
         }
 
         @Test
@@ -32,7 +33,7 @@ class DeckUTest {
             Stack<Card> expectedCards = initializeCards();
 
             // when
-            final Deck deck = Deck.createNewDeck();
+            final Deck deck = Deck.createNewDeck(deckId);
 
             // then
             assertThat(deck.getCards().size()).isEqualTo(DECK_SIZE);
@@ -46,7 +47,7 @@ class DeckUTest {
     @Test
     void shuffle_should_shuffle_cards() throws InvalidCardException {
         // given
-        final Deck deck = Deck.createNewDeck();
+        final Deck deck = Deck.createNewDeck(deckId);
         Stack<Card> expectedCards = initializeCards();
 
         // when
@@ -67,8 +68,8 @@ class DeckUTest {
         @Test
         void true_when_deck_contain_same_cards_in_same_order() {
             // given
-            final Deck deck1 = Deck.createNewDeck();
-            final Deck deck2 = Deck.createNewDeck();
+            final Deck deck1 = Deck.createNewDeck(deckId);
+            final Deck deck2 = Deck.createNewDeck(deckId);
 
             // when
             final boolean areEqual = deck1.equals(deck2);
@@ -80,9 +81,9 @@ class DeckUTest {
         @Test
         void false_when_deck_contain_same_cards_in_different_order() {
             // given
-            final Deck deck1 = Deck.createNewDeck();
+            final Deck deck1 = Deck.createNewDeck(deckId);
             deck1.shuffle();
-            final Deck deck2 = Deck.createNewDeck();
+            final Deck deck2 = Deck.createNewDeck(deckId);
 
             // when
             final boolean areEqual = deck1.equals(deck2);

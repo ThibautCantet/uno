@@ -35,15 +35,15 @@ class ShuffleDeckCommandHandlerUTest {
             DeckId deckId = new DeckId(UUID.randomUUID());
             shuffleDeckCommand = new ShuffleDeckCommand(deckId);
 
-            deck = Deck.createNewDeck();
-            when(deckRepository.findNewDeck()).thenReturn(deck);
+            deck = Deck.createNewDeck(deckId);
+            when(deckRepository.findNewDeck(shuffleDeckCommand.getDeckId())).thenReturn(deck);
         }
 
         @Test
         void shuffle_deck() {
             // given
             Deck spyedDeck = mock(Deck.class);
-            when(deckRepository.findNewDeck()).thenReturn(spyedDeck);
+            when(deckRepository.findNewDeck(shuffleDeckCommand.getDeckId())).thenReturn(spyedDeck);
             when(spyedDeck.getCards()).thenReturn(deck.getCards());
 
             // when
@@ -58,7 +58,7 @@ class ShuffleDeckCommandHandlerUTest {
             // given
             Deck spyedDeck = mock(Deck.class);
             when(spyedDeck.getId()).thenReturn(deck.getId());
-            when(deckRepository.findNewDeck()).thenReturn(spyedDeck);
+            when(deckRepository.findNewDeck(shuffleDeckCommand.getDeckId())).thenReturn(spyedDeck);
             when(spyedDeck.getCards()).thenReturn(deck.getCards());
 
             when(spyedDeck.getCards()).thenReturn(deck.getCards());

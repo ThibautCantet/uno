@@ -20,7 +20,7 @@ public class ShuffleDeckCommandHandler implements CommandHandler<CommandResponse
 
     @Override
     public CommandResponse<Void> handle(ShuffleDeckCommand command) {
-        final Deck deck = deckRepository.findNewDeck();
+        final Deck deck = deckRepository.findNewDeck(command.getDeckId());
 
         deck.shuffle();
 

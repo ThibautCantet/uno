@@ -72,7 +72,7 @@ public class Deck {
         this.cards.addAll(shuffledCards);
     }
 
-    public static Deck createNewDeck() {
-        return new Deck(new DeckId());
+    public static Deck createNewDeck(DeckId deckId) {
+        return new Deck(deckId);
     }
 }
