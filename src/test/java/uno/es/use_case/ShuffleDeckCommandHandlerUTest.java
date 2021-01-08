@@ -54,21 +54,17 @@ class ShuffleDeckCommandHandlerUTest {
         }
 
         @Test
-        void save_generated_events() {
+        void save_shuffled_deck() {
             // given
             Deck spyedDeck = mock(Deck.class);
             when(spyedDeck.getId()).thenReturn(deck.getId());
             when(deckRepository.findNewDeck(shuffleDeckCommand.getDeckId())).thenReturn(spyedDeck);
-            when(spyedDeck.getCards()).thenReturn(deck.getCards());
-
-            when(spyedDeck.getCards()).thenReturn(deck.getCards());
-            final List<CardShuffledEvent> events = generateEvent(deck);
 
             // when
             shuffleDeckCommandHandler.handle(shuffleDeckCommand);
 
             // then
-            verify(deckRepository).save(events);
+            verify(deckRepository).save(spyedDeck);
         }
 
         @Test
@@ -78,13 +74,6 @@ class ShuffleDeckCommandHandlerUTest {
 
             // then
             assertThat(result.getValue()).isNull();
-        }
-
-        private List<CardShuffledEvent> generateEvent(Deck deck) {
-            return IntStream
-                    .range(0, deck.getCards().size())
-                    .mapToObj(index -> new CardShuffledEvent(deck.getId(), deck.getCards().get(index), index + 1))
-                    .collect(Collectors.toList());
         }
     }
 

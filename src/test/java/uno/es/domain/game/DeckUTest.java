@@ -44,23 +44,38 @@ class DeckUTest {
 
     }
 
-    @Test
-    void shuffle_should_shuffle_cards() throws InvalidCardException {
-        // given
-        final Deck deck = Deck.createNewDeck(deckId);
-        Stack<Card> expectedCards = initializeCards();
+    @Nested
+    class SuffleShould {
+        @Test
+        void shuffle_cards() throws InvalidCardException {
+            // given
+            final Deck deck = Deck.createNewDeck(deckId);
+            Stack<Card> expectedCards = initializeCards();
 
-        // when
-        deck.shuffle();
+            // when
+            deck.shuffle();
 
-        // then
-        assertThat(deck.getCards().size()).isEqualTo(DECK_SIZE);
-        Boolean[] areSameCard = new Boolean[DECK_SIZE];
-        Arrays.fill(areSameCard, Boolean.TRUE);
-        for (int i = 0; i < deck.getCards().size() -1; i++) {
-            areSameCard[i] = deck.getCards().get(i).equals(expectedCards.pop());
+            // then
+            assertThat(deck.getCards().size()).isEqualTo(DECK_SIZE);
+            Boolean[] areSameCard = new Boolean[DECK_SIZE];
+            Arrays.fill(areSameCard, Boolean.TRUE);
+            for (int i = 0; i < deck.getCards().size() - 1; i++) {
+                areSameCard[i] = deck.getCards().get(i).equals(expectedCards.pop());
+            }
+            assertThat(Arrays.stream(areSameCard).allMatch(same -> same)).isFalse();
         }
-        assertThat(Arrays.stream(areSameCard).allMatch(same -> same)).isFalse();
+
+        @Test
+        void return_CardShuffledEvent2() {
+            // given
+            final Deck deck = Deck.createNewDeck(deckId);
+
+            // when
+            DeckShuffledEvent event = deck.shuffle();
+
+            // then
+            assertThat(event).isEqualTo(new DeckShuffledEvent(deckId, deck.getCards()));
+        }
     }
 
     @Nested

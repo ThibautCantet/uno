@@ -60,7 +60,7 @@ public class Deck {
         return true;
     }
 
-    public void shuffle() {
+    public DeckShuffledEvent shuffle() {
         Random random = new Random();
         List<Card> shuffledCards = new ArrayList<>();
         for (int currentIndex = cards.size() - 1; currentIndex >= 0; currentIndex--) {
@@ -70,6 +70,7 @@ public class Deck {
         }
         this.cards.clear();
         this.cards.addAll(shuffledCards);
+        return new DeckShuffledEvent(deckId, cards);
     }
 
     public static Deck createNewDeck(DeckId deckId) {

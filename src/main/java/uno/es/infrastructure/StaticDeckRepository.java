@@ -1,11 +1,7 @@
 package uno.es.infrastructure;
 
-import uno.es.domain.game.CardShuffledEvent;
-import uno.es.domain.game.Deck;
-import uno.es.domain.game.DeckId;
-import uno.es.domain.game.DeckRepository;
+import uno.es.domain.game.*;
 
-import java.util.List;
 
 public class StaticDeckRepository implements DeckRepository {
     @Override
@@ -14,7 +10,12 @@ public class StaticDeckRepository implements DeckRepository {
     }
 
     @Override
-    public void save(List<CardShuffledEvent> cardShuffledEvents) {
+    public void save(Deck deck) {
 
+    }
+
+    @Override
+    public Deck find(DeckId deckId) {
+        return null;
     }
 }
