@@ -64,4 +64,49 @@ class CardUTest {
         // thenR
         assertThat(toString).isEqualTo("Card{cartNumber=ONE, color=BLUE}");
     }
+
+    @Nested
+    class EqualsShouldReturn {
+        @Test
+        void true_when_cardNumber_and_color_are_the_same() throws InvalidCardException {
+            // given
+            final Card card1 = new Card(CARD_NUMBER, COLOR);
+            final Card card2 = new Card(CARD_NUMBER, COLOR);
+
+            // when
+            final boolean areEqual = card1.equals(card2);
+
+            // then
+            assertThat(areEqual).isTrue();
+        }
+
+        @Nested
+        class FalseWhen {
+            @Test
+            void cardNumber_are_different_and_color_are_the_same() throws InvalidCardException {
+                // given
+                final Card card1 = new Card(CartNumber.ONE, COLOR);
+                final Card card2 = new Card(CartNumber.TWO, COLOR);
+
+                // when
+                final boolean areEqual = card1.equals(card2);
+
+                // then
+                assertThat(areEqual).isFalse();
+            }
+
+            @Test
+            void cardNumber_are_the_same_and_color_different() throws InvalidCardException {
+                // given
+                final Card card1 = new Card(CARD_NUMBER, Color.RED);
+                final Card card2 = new Card(CARD_NUMBER, Color.GREEN);
+
+                // when
+                final boolean areEqual = card1.equals(card2);
+
+                // then
+                assertThat(areEqual).isFalse();
+            }
+        }
+    }
 }

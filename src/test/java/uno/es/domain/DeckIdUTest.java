@@ -15,7 +15,7 @@ class DeckIdUTest {
     @Nested
     class Constructor {
         @Test
-        void can_take_no_parameter() throws InvalidDeckIdException {
+        void can_take_no_parameter() {
             // when
             final DeckId deckId = new DeckId();
 

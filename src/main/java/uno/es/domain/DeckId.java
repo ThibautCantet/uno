@@ -11,8 +11,8 @@ public final class DeckId implements AggregateId {
         this.value = ofNullable(value).orElseThrow(InvalidDeckIdException::new);
     }
 
-    public DeckId() throws InvalidDeckIdException {
-        this(UUID.randomUUID());
+    public DeckId() {
+        this.value = UUID.randomUUID();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package uno.es.domain;
 
+import java.util.Objects;
+
 import static java.util.Optional.ofNullable;
 
 public final class Card {
@@ -25,5 +27,13 @@ public final class Card {
                 "cartNumber=" + cartNumber +
                 ", color=" + color +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Card)) return false;
+        Card card = (Card) o;
+        return cartNumber == card.cartNumber && color == card.color;
     }
 }
