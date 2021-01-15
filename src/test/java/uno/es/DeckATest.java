@@ -4,7 +4,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.fr.Alors;
 import io.cucumber.java.fr.Etque;
 import io.cucumber.java.fr.Quand;
-import uno.es.domain.SimpleDeckCreated;
+import uno.es.domain.game.SimpleDeckCreated;
 import uno.es.domain.game.*;
 
 import java.util.ArrayList;
@@ -24,9 +24,9 @@ public class DeckATest {
         simpleDeckCreated = new SimpleDeckCreated();
     }
 
-    @Quand("je récupère le paquet de carte")
+    @Quand("je récupère le paquet de cartes")
     public void jeRécupèreLePaquetDeCarte() {
-        deck = Deck.createNewDeck(new DeckId(), simpleDeckCreated.getCards());
+        deck = Deck.createNewDeck(new DeckId(), simpleDeckCreated.getCardDtos());
     }
 
     @Alors("il doit être trié par couleur et ordre croissant")

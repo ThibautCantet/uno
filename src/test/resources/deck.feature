@@ -3,7 +3,7 @@ Fonctionnalité: Gestion du paquet de cartes
 
   Scénario: Initialisation d'un paquet de cartes neuves
     Et que le jeu de carte simple est neuf
-    Quand je récupère le paquet de carte
+    Quand je récupère le paquet de cartes
     Alors il doit être trié par couleur et ordre croissant
       | color  | value |
       | BLUE   | ZERO  |

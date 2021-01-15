@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
 public class Deck {
-
-    public static final int DECK_SIZE = 76;
 
     private final Stack<Card> cards;
     private final DeckId deckId;
@@ -17,10 +16,28 @@ public class Deck {
 
     private Deck(DeckId deckId) {
         this.deckId = deckId;
-        cards = new Stack<>();
+        this.cards = new Stack<>();
         addZeroCards(CartNumber.ZERO);
         addOneToNineCards();
         addOneToNineCards();
+    }
+
+    public Deck(DeckId deckId, List<CardDto> cardDtos) {
+        this.deckId = deckId;
+        this.cards = initializeCards(cardDtos);
+    }
+
+    private Stack<Card> initializeCards(List<CardDto> cardDtos) {
+        final Stack<Card> cards = new Stack<>();
+        cards.addAll(
+                cardDtos.stream()
+                        .map(this::convert)
+                        .collect(Collectors.toList()));
+        return cards;
+    }
+
+    private Card convert(CardDto cardDto) {
+        return new Card(cardDto.getCartNumber(), cardDto.getColor());
     }
 
     private void addOneToNineCards() {
@@ -31,15 +48,11 @@ public class Deck {
 
     private void addZeroCards(CartNumber cartNumber) {
         final Card redCard;
-        try {
-            redCard = new Card(cartNumber, Color.RED);
-            final Card greenCard = new Card(cartNumber, Color.GREEN);
-            final Card bleuCard = new Card(cartNumber, Color.BLUE);
-            final Card yellowCard = new Card(cartNumber, Color.YELLOW);
-            cards.addAll(asList(redCard, greenCard, bleuCard, yellowCard));
-        } catch (InvalidCardException e) {
-
-        }
+        redCard = new Card(cartNumber, Color.RED);
+        final Card greenCard = new Card(cartNumber, Color.GREEN);
+        final Card bleuCard = new Card(cartNumber, Color.BLUE);
+        final Card yellowCard = new Card(cartNumber, Color.YELLOW);
+        cards.addAll(asList(redCard, greenCard, bleuCard, yellowCard));
     }
 
     public Stack<Card> getCards() {
@@ -77,8 +90,8 @@ public class Deck {
         getGeneratedEvents.add(new DeckShuffledEvent(deckId, cards));
     }
 
-    public static Deck createNewDeck(DeckId deckId, List<Card> cards) {
-        return null;
+    public static Deck createNewDeck(DeckId deckId, List<CardDto> cardDtos) {
+        return new Deck(deckId, cardDtos);
     }
 
     public static Deck createNewDeck(DeckId deckId) {

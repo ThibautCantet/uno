@@ -5,19 +5,19 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static uno.es.domain.game.Deck.DECK_SIZE;
 
 class DeckUTest {
 
-    private DeckId deckId = new DeckId();
+    private final DeckId deckId = new DeckId();
 
     @Nested
-    class ConstructorShould {
+    class CreateNewDeckShould {
         @Test
         void initialize_new_aggregate_id() {
             // when
@@ -30,16 +30,15 @@ class DeckUTest {
         @Test
         void initialize_all_cards_with_19_cards_of_each_color_two_same_from_one_to_nine_and_only_1_zero() throws InvalidCardException {
             // given
-            Stack<Card> expectedCards = initializeCards();
+            List<CardDto> initialeCards = Collections.singletonList(new CardDto(CartNumber.ZERO, Color.BLUE));
+            final Card expectedCard = new Card(CartNumber.ZERO, Color.BLUE);
 
             // when
-            final Deck deck = Deck.createNewDeck(deckId);
+            final Deck deck = Deck.createNewDeck(deckId, initialeCards);
 
             // then
-            assertThat(deck.getCards().size()).isEqualTo(DECK_SIZE);
-            deck.getCards().forEach(card ->
-                    assertThat(card.equals(expectedCards.pop()))
-            );
+            assertThat(deck.getCards().size()).isEqualTo(1);
+            assertThat(deck.getCards()).containsExactly(expectedCard);
         }
 
     }
@@ -49,15 +48,27 @@ class DeckUTest {
         @Test
         void shuffle_cards() throws InvalidCardException {
             // given
-            final Deck deck = Deck.createNewDeck(deckId);
-            Stack<Card> expectedCards = initializeCards();
+            List<CardDto> initialeCards = asList(
+                    new CardDto(CartNumber.ZERO, Color.BLUE),
+                    new CardDto(CartNumber.ONE, Color.BLUE),
+                    new CardDto(CartNumber.TWO, Color.BLUE),
+                    new CardDto(CartNumber.THREE, Color.BLUE),
+                    new CardDto(CartNumber.FOUR, Color.BLUE)
+            );
+            final Deck deck = Deck.createNewDeck(deckId, initialeCards);
+            Stack<Card> expectedCards = new Stack<>();
+            expectedCards.addAll(asList(
+                    new Card(CartNumber.ZERO, Color.BLUE),
+                    new Card(CartNumber.ONE, Color.BLUE),
+                    new Card(CartNumber.TWO, Color.BLUE),
+                    new Card(CartNumber.THREE, Color.BLUE),
+                    new Card(CartNumber.FOUR, Color.BLUE)));
 
             // when
             deck.shuffle();
 
             // then
-            assertThat(deck.getCards().size()).isEqualTo(DECK_SIZE);
-            Boolean[] areSameCard = new Boolean[DECK_SIZE];
+            Boolean[] areSameCard = new Boolean[5];
             Arrays.fill(areSameCard, Boolean.TRUE);
             for (int i = 0; i < deck.getCards().size() - 1; i++) {
                 areSameCard[i] = deck.getCards().get(i).equals(expectedCards.pop());
@@ -106,29 +117,5 @@ class DeckUTest {
             // then
             assertThat(areEqual).isFalse();
         }
-    }
-
-    private Stack<Card> initializeCards() throws InvalidCardException {
-        Stack<Card> expectedCards = new Stack<>();
-        expectedCards.addAll(addZeroCards(CartNumber.ZERO));
-        expectedCards.addAll(addOneToNineCards());
-        expectedCards.addAll(addOneToNineCards());
-        return expectedCards;
-    }
-
-    private Stack<Card> addOneToNineCards() throws InvalidCardException {
-        Stack<Card> cards = new Stack<>();
-        for (int i = 1; i < 10; i++) {
-            cards.addAll(addZeroCards(CartNumber.fromValue(i)));
-        }
-        return cards;
-    }
-
-    private List<Card> addZeroCards(CartNumber cartNumber) throws InvalidCardException {
-        final Card redCard = new Card(cartNumber, Color.RED);
-        final Card greenCard = new Card(cartNumber, Color.GREEN);
-        final Card bleuCard = new Card(cartNumber, Color.BLUE);
-        final Card yellowCard = new Card(cartNumber, Color.YELLOW);
-        return asList(redCard, greenCard, bleuCard, yellowCard);
     }
 }
