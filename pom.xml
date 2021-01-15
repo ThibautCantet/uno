@@ -41,6 +41,7 @@
         <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
         <versions-maven-plugin.version>2.2</versions-maven-plugin.version>
 
+        <cucumber.version>5.5.0</cucumber.version>
     </properties>
 
     <prerequisites>
@@ -88,6 +89,18 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -188,6 +201,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <requiresUnpack>
+                        <dependency>
+                            <groupId>info.cukes</groupId>
+                            <artifactId>cucumber-java</artifactId>
+                        </dependency>
+                    </requiresUnpack>
+                </configuration>
             </plugin>
 
         </plugins>

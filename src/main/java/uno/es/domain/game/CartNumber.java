@@ -9,7 +9,7 @@ public enum CartNumber {
     FIVE(5),
     SIX(6),
     SEVEN(7),
-    HEIGHT(8),
+    EIGHT(8),
     NINE(9);
 
     private final int value;

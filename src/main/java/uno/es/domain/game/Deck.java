@@ -77,6 +77,10 @@ public class Deck {
         getGeneratedEvents.add(new DeckShuffledEvent(deckId, cards));
     }
 
+    public static Deck createNewDeck(DeckId deckId, List<Card> cards) {
+        return null;
+    }
+
     public static Deck createNewDeck(DeckId deckId) {
         return new Deck(deckId);
     }
