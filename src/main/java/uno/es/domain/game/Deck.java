@@ -101,4 +101,12 @@ public class Deck {
     public List<DeckEvent> getGeneratedEvents() {
         return getGeneratedEvents;
     }
+
+    public void distribute(int numberOfDistributedCardsByPlayer, int numberOfPlayers) {
+        final int numberOfCardsToPop = numberOfDistributedCardsByPlayer * numberOfPlayers;
+
+        for (int i = 0; i < numberOfCardsToPop; i++) {
+            this.cards.pop();
+        }
+    }
 }

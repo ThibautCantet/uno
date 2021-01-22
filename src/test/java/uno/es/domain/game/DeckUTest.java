@@ -118,4 +118,36 @@ class DeckUTest {
             assertThat(areEqual).isFalse();
         }
     }
+
+    @Test
+    void distribute_should_remove_the_first_numberOfDistributedCardsByPlayer_x_numberOfPlayers_cards() {
+        // given
+        List<CardDto> initialeCards = asList(
+                new CardDto(CartNumber.ZERO, Color.BLUE),
+                new CardDto(CartNumber.ONE, Color.BLUE),
+                new CardDto(CartNumber.TWO, Color.BLUE),
+                new CardDto(CartNumber.THREE, Color.BLUE),
+                new CardDto(CartNumber.FOUR, Color.BLUE),
+                new CardDto(CartNumber.FIVE, Color.BLUE),
+                new CardDto(CartNumber.SIX, Color.BLUE),
+                new CardDto(CartNumber.SEVEN, Color.BLUE),
+                new CardDto(CartNumber.EIGHT, Color.BLUE)
+        );
+        final Deck deck = Deck.createNewDeck(deckId, initialeCards);
+
+        // when
+        deck.distribute(2, 3);
+
+        // then
+        final List<Card> cards = asList(
+                new Card(CartNumber.ZERO, Color.BLUE),
+                new Card(CartNumber.ONE, Color.BLUE),
+                new Card(CartNumber.TWO, Color.BLUE)
+        );
+        Stack<Card> expectedCards = new Stack<>();
+        expectedCards.addAll(cards);
+
+        assertThat(deck.getCards().size()).isEqualTo(3);
+        assertThat(deck.getCards()).isEqualTo(expectedCards);
+    }
 }
