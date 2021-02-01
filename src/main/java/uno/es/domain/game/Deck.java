@@ -109,4 +109,8 @@ public class Deck {
             this.cards.pop();
         }
     }
+
+    public Card pop() {
+        return this.cards.pop();
+    }
 }

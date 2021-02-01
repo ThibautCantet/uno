@@ -84,7 +84,8 @@ Fonctionnalité: Gestion du paquet de cartes
       | GREEN  | NINE  |
 
   Scénario: Distribution des cartes
-    Et que le jeu de carte simple est mélangé
+    Etant donné une partie avec 3 joueurs
+    Et le jeu de carte simple est mélangé
       | color  | value |
       | BLUE   | ONE   |
       | BLUE   | TWO   |
@@ -163,7 +164,7 @@ Fonctionnalité: Gestion du paquet de cartes
       | GREEN  | SIX   |
       | GREEN  | SEVEN |
       | GREEN  | NINE  |
-    Quand je distribue 7 cartes à 3 joueurs
+    Quand je distribue 7 cartes
     Alors il ne reste plus que les cartes suivantes
       | color  | value |
       | BLUE   | ONE   |
