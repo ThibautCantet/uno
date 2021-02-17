@@ -1,28 +1,38 @@
 package uno.es;
 
-import io.cucumber.datatable.DataTable;
-import io.cucumber.java.fr.*;
-import uno.es.domain.Game;
-import uno.es.domain.Player;
-import uno.es.domain.game.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.fr.Alors;
+import io.cucumber.java.fr.Et;
+import io.cucumber.java.fr.Etantdonné;
+import io.cucumber.java.fr.Etque;
+import io.cucumber.java.fr.Quand;
+import uno.es.domain.Game;
+import uno.es.domain.Player;
+import uno.es.domain.game.Card;
+import uno.es.domain.game.CardDto;
+import uno.es.domain.game.CartNumber;
+import uno.es.domain.game.Color;
+import uno.es.domain.game.Deck;
+import uno.es.domain.game.DeckId;
+import uno.es.domain.game.InvalidCardException;
 
 public class DistributionATest {
 
     private Game game;
+
     private int numberOfPlayers;
 
     @Etantdonné("une partie avec {int} joueurs")
     public void unePartieAvecJoueurs(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
-
 
     @Etque("le jeu de carte simple est mélangé")
     public void leJeuDeCarteSimpleEstMélangé(DataTable dataTable) {
@@ -51,18 +61,14 @@ public class DistributionATest {
     }
 
     public Card buildCard(Map<String, String> entry) {
-        try {
-            return new Card(CartNumber.valueOf(entry.get("value")), Color.valueOf(entry.get("color")));
-        } catch (InvalidCardException e) {
-            return null;
-        }
+        return new Card(CartNumber.valueOf(entry.get("value")), Color.valueOf(entry.get("color")));
     }
 
     @Et("le joueur {int} a les cartes suivantes")
     public void leJoueurALesCartesSuivantes(int playerId, DataTable dataTable) {
         List<Card> expectedCards = dataTableTransformEntries(dataTable, this::buildCard);
         Player player = game.getPlayerById(playerId);
-        assertThat(player.getCards()).isEqualTo(expectedCards);
+        assertThat(player.getCards()).containsOnlyElementsOf(expectedCards);
     }
 
     private <T> List<T> dataTableTransformEntries(DataTable dataTable, Function<Map<String, String>, T> transformFunction) {

@@ -15,22 +15,26 @@ public class Game {
         this.numberOfPlayers = numberOfPlayers;
         this.players = new HashMap<>();
         for (int i = 1; i <= numberOfPlayers; i++) {
-            players.computeIfAbsent(1, Player::new);
+            players.computeIfAbsent(i, playerId -> new Player(playerId));
         }
         this.deck = deck;
     }
 
     public Player getPlayerById(int playerId) {
-        return players.get(playerId);
+        return getCurrentPlayer(playerId);
     }
 
     public void distribute(int numberOfDistributedCardsByPlayer) {
         for (int distributedCardIndex = 1; distributedCardIndex <= numberOfDistributedCardsByPlayer; distributedCardIndex++) {
-            for (int player = 0; player < numberOfPlayers; player++) {
+            for (int player = 1; player <= numberOfPlayers; player++) {
                 final Card card = this.deck.pop();
-
+                getCurrentPlayer(player).addCard(card);
             }
         }
+    }
+
+    private Player getCurrentPlayer(int player) {
+        return players.get(player);
     }
 
     public List<Card> getDeckCards() {

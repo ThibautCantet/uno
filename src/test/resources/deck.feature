@@ -224,26 +224,29 @@ Fonctionnalité: Gestion du paquet de cartes
       | GREEN  | FOUR  |
       | YELLOW | EIGHT |
     Et le joueur 1 a les cartes suivantes
-      | GREEN  | EIGHT |1|
-      | GREEN  | ZERO  |1|
-      | GREEN  | THREE |1|
-      | GREEN  | SIX   |1|
-      | GREEN  | FOUR  |1|
-      | GREEN  | FIVE  |1|
-      | GREEN  | NINE  |1|
+      | color | value | id |
+      | GREEN | EIGHT | 1  |
+      | GREEN | ZERO  | 1  |
+      | GREEN | THREE | 1  |
+      | GREEN | SIX   | 1  |
+      | GREEN | FOUR  | 1  |
+      | GREEN | FIVE  | 1  |
+      | GREEN | NINE  | 1  |
     Et le joueur 2 a les cartes suivantes
-      | YELLOW | NINE  |2|
-      | YELLOW | NINE  |2|
-      | GREEN  | ONE   |2|
-      | GREEN  | TWO   |2|
-      | GREEN  | THREE |2|
-      | GREEN  | SEVEN |2|
-      | GREEN  | SEVEN |2|
+      | color  | value | id |
+      | YELLOW | NINE  | 2  |
+      | YELLOW | NINE  | 2  |
+      | GREEN  | ONE   | 2  |
+      | GREEN  | TWO   | 2  |
+      | GREEN  | THREE | 2  |
+      | GREEN  | SEVEN | 2  |
+      | GREEN  | SEVEN | 2  |
     Et le joueur 3 a les cartes suivantes
-      | RED    | FIVE  |3|
-      | GREEN  | EIGHT |3|
-      | GREEN  | ONE   |3|
-      | GREEN  | TWO   |3|
-      | GREEN  | NINE  |3|
-      | GREEN  | FIVE  |3|
-      | GREEN  | SIX   |3|
+      | color | value | id |
+      | RED   | FIVE  | 3  |
+      | GREEN | EIGHT | 3  |
+      | GREEN | ONE   | 3  |
+      | GREEN | TWO   | 3  |
+      | GREEN | NINE  | 3  |
+      | GREEN | FIVE  | 3  |
+      | GREEN | SIX   | 3  |
