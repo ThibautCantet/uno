@@ -1,12 +1,13 @@
 package uno.es.infrastructure;
 
+import uno.es.domain.Game;
 import uno.es.domain.game.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class StaticDeckRepository implements DeckRepository {
+public class StaticGameRepository implements GameRepository {
     private final List<DeckEvent> events = new ArrayList<>();
 
     @Override
@@ -15,16 +16,20 @@ public class StaticDeckRepository implements DeckRepository {
     }
 
     @Override
-    public void save(Deck deck) {
-        events.addAll(deck.getGeneratedEvents());
+    public void save(Game game) {
+        events.addAll(game.getDeck().getGeneratedEvents());
     }
 
     @Override
-    public Deck find(DeckId deckId) {
+    public Game find(GameId gameId) {
         return null;
     }
 
     List<DeckEvent> getEvents() {
         return events;
+    }
+
+    public void addEvent(DeckEvent event) {
+        events.add(event);
     }
 }

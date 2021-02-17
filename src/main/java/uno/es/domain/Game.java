@@ -2,6 +2,7 @@ package uno.es.domain;
 
 import uno.es.domain.game.Card;
 import uno.es.domain.game.Deck;
+import uno.es.domain.game.GameId;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,5 +44,13 @@ public class Game {
 
     public Deck getDeck() {
         return deck;
+    }
+
+    public void shuffle() {
+
+    }
+
+    public GameId getId() {
+        return null;
     }
 }

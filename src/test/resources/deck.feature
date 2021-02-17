@@ -85,6 +85,7 @@ Fonctionnalité: Gestion du paquet de cartes
 
   Scénario: Distribution des cartes
     Etant donné une partie avec 3 joueurs
+    Et le jeu de carte simple est neuf trié
     Et le jeu de carte simple est mélangé
       | color  | value |
       | BLUE   | ONE   |

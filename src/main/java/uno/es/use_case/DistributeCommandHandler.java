@@ -2,20 +2,19 @@ package uno.es.use_case;
 
 import uno.es.domain.ddd.CommandHandler;
 import uno.es.domain.ddd.CommandResponse;
-import uno.es.domain.game.Deck;
-import uno.es.domain.game.DeckRepository;
+import uno.es.domain.game.GameRepository;
 
 public class DistributeCommandHandler implements CommandHandler<CommandResponse<Void>, DistributeCommand> {
 
-    private final DeckRepository deckRepository;
+    private final GameRepository gameRepository;
 
-    public DistributeCommandHandler(DeckRepository deckRepository) {
-        this.deckRepository = deckRepository;
+    public DistributeCommandHandler(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
     }
 
     @Override
     public CommandResponse<Void> handle(DistributeCommand command) {
-        // final Deck deck = deckRepository.findNewDeck(command.getDeckId());
+        // final Deck deck = deckRepository.findNewDeck(command.getGameId());
 
         // deck.shuffle();
 

@@ -1,16 +1,20 @@
 package uno.es.use_case;
 
 import uno.es.domain.ddd.Command;
-import uno.es.domain.game.DeckId;
+import uno.es.domain.game.GameId;
 
 public class DistributeCommand implements Command {
-    private final DeckId deckId;
+    private final GameId gameId;
+    private final int numberOfPlayers;
+    private final int numberOfDistributedCardsByPlayer;
 
-    public DistributeCommand(DeckId deckId) {
-        this.deckId = deckId;
+    public DistributeCommand(GameId gameId, int numberOfPlayers, int numberOfDistributedCardsByPlayer) {
+        this.gameId = gameId;
+        this.numberOfPlayers = numberOfPlayers;
+        this.numberOfDistributedCardsByPlayer = numberOfDistributedCardsByPlayer;
     }
 
-    public DeckId getDeckId() {
-        return deckId;
+    public GameId getGameId() {
+        return gameId;
     }
 }

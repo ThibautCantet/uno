@@ -1,12 +1,12 @@
 package uno.es.use_case;
 
-import uno.es.domain.ddd.Command;
+import uno.es.domain.ddd.Query;
 import uno.es.domain.game.GameId;
 
-public class ShuffleDeckCommand implements Command {
+public class GetGameQuery implements Query {
     private final GameId gameId;
 
-    public ShuffleDeckCommand(GameId gameId) {
+    public GetGameQuery(GameId gameId) {
         this.gameId = gameId;
     }
 

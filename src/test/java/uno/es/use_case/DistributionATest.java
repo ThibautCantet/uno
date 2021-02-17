@@ -14,52 +14,61 @@ import io.cucumber.java.fr.Et;
 import io.cucumber.java.fr.Etantdonné;
 import io.cucumber.java.fr.Etque;
 import io.cucumber.java.fr.Quand;
+import org.junit.Before;
 import uno.es.domain.Game;
 import uno.es.domain.Player;
+import uno.es.domain.ddd.QueryResponse;
 import uno.es.domain.game.*;
-import uno.es.use_case.DistributeCommandHandler;
+import uno.es.infrastructure.StaticGameRepository;
 
 public class DistributionATest {
 
-    private Game game;
-
     private int numberOfPlayers;
     private DistributeCommandHandler distributeCommandHandler;
-    private DeckRepository deckRepository;
+    private StaticGameRepository deckRepository;
+    private final GameId gameId = new GameId();
     private final DeckId deckId = new DeckId();
+
+    @Before
+    public void setUp() {
+        deckRepository = new StaticGameRepository();
+        distributeCommandHandler = new DistributeCommandHandler(deckRepository);
+    }
 
     @Etantdonné("une partie avec {int} joueurs")
     public void unePartieAvecJoueurs(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
 
+    @Et("le jeu de carte simple est neuf trié")
+    public void leJeuDeCarteSimpleEstNeufTrié() {
+        SimpleDeckCreated simpleDeckCreated = new SimpleDeckCreated();
+        deckRepository.addEvent(simpleDeckCreated);
+    }
+
     @Etque("le jeu de carte simple est mélangé")
     public void leJeuDeCarteSimpleEstMélangé(DataTable dataTable) {
-        List<CardDto> cards = dataTableTransformEntries(dataTable, this::buildCardDto);
-        Deck deck = new Deck(new DeckId(), cards);
-        game = new Game(numberOfPlayers, deck);
+        List<Card> cards = dataTableTransformEntries(dataTable, this::buildCard);
+        DeckShuffledEvent deckShuffledEvent = new DeckShuffledEvent(deckId, cards);
+        deckRepository.addEvent(deckShuffledEvent);
     }
 
     @Quand("je distribue {int} cartes")
     public void jeDistribueCartes(int numberOfDistributedCardsByPlayer) {
-        distributeCommandHandler.handle(new DistributeCommand(deckId));
+        distributeCommandHandler.handle(new DistributeCommand(gameId, numberOfPlayers, numberOfDistributedCardsByPlayer));
         // game.distribute(numberOfDistributedCardsByPlayer);
-    }
-
-    public CardDto buildCardDto(Map<String, String> entry) {
-        try {
-            return new CardDto(CartNumber.valueOf(entry.get("value")), Color.valueOf(entry.get("color")));
-        } catch (InvalidCardException e) {
-            return null;
-        }
     }
 
     @Alors("il ne reste plus que les cartes suivantes")
     public void ilNeRestePlusQueLesCartesSuivantes(DataTable dataTable) {
+        GetGameQueryHandler getGameQueryHandler = new GetGameQueryHandler(deckRepository);
+        final QueryResponse<Game> queryResponse = getGameQueryHandler.handle(new GetGameQuery(gameId));
+
         List<Card> expectedCards = dataTableTransformEntries(dataTable, this::buildCard);
 
+        final Game game = queryResponse.getValue();
         assertThat(game.getDeckCards()).isEqualTo(expectedCards);
-        verify(deckRepository).save(game.getDeck());
+        //verify(deckRepository).save(game.getDeck());
     }
 
     public Card buildCard(Map<String, String> entry) {
@@ -68,6 +77,10 @@ public class DistributionATest {
 
     @Et("le joueur {int} a les cartes suivantes")
     public void leJoueurALesCartesSuivantes(int playerId, DataTable dataTable) {
+        GetGameQueryHandler getGameQueryHandler = new GetGameQueryHandler(deckRepository);
+        final QueryResponse<Game> queryResponse = getGameQueryHandler.handle(new GetGameQuery(gameId));
+        final Game game = queryResponse.getValue();
+
         List<Card> expectedCards = dataTableTransformEntries(dataTable, this::buildCard);
         Player player = game.getPlayerById(playerId);
         assertThat(player.getCards()).containsOnlyElementsOf(expectedCards);

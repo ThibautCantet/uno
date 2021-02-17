@@ -3,13 +3,11 @@ package uno.es.use_case;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import uno.es.domain.Game;
 import uno.es.domain.ddd.CommandResponse;
 import uno.es.domain.game.*;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -17,13 +15,13 @@ import static org.mockito.Mockito.*;
 class ShuffleDeckCommandHandlerUTest {
     private ShuffleDeckCommandHandler shuffleDeckCommandHandler;
 
-    private DeckRepository deckRepository;
-    private Deck deck;
+    private GameRepository gameRepository;
+    private Game game;
 
     @BeforeEach
     void setUp() {
-        deckRepository = mock(DeckRepository.class);
-        shuffleDeckCommandHandler = new ShuffleDeckCommandHandler(deckRepository);
+        gameRepository = mock(GameRepository.class);
+        shuffleDeckCommandHandler = new ShuffleDeckCommandHandler(gameRepository);
     }
 
     @Nested
@@ -31,40 +29,30 @@ class ShuffleDeckCommandHandlerUTest {
         private ShuffleDeckCommand shuffleDeckCommand;
 
         @BeforeEach
-        void setUp() throws InvalidDeckIdException {
-            DeckId deckId = new DeckId(UUID.randomUUID());
-            shuffleDeckCommand = new ShuffleDeckCommand(deckId);
+        void setUp() throws InvalidGameIdException {
+            GameId gameId = new GameId(UUID.randomUUID());
+            shuffleDeckCommand = new ShuffleDeckCommand(gameId);
 
-            deck = Deck.createNewDeck(deckId);
-            when(deckRepository.findNewDeck(shuffleDeckCommand.getDeckId())).thenReturn(deck);
+            game = mock(Game.class);
+            when(gameRepository.find(shuffleDeckCommand.getGameId())).thenReturn(game);
         }
 
         @Test
         void shuffle_deck() {
-            // given
-            Deck spyedDeck = mock(Deck.class);
-            when(deckRepository.findNewDeck(shuffleDeckCommand.getDeckId())).thenReturn(spyedDeck);
-            when(spyedDeck.getCards()).thenReturn(deck.getCards());
-
             // when
             shuffleDeckCommandHandler.handle(shuffleDeckCommand);
 
             // then
-            verify(spyedDeck).shuffle();
+            verify(game).shuffle();
         }
 
         @Test
         void save_shuffled_deck() {
-            // given
-            Deck spyedDeck = mock(Deck.class);
-            when(spyedDeck.getId()).thenReturn(deck.getId());
-            when(deckRepository.findNewDeck(shuffleDeckCommand.getDeckId())).thenReturn(spyedDeck);
-
             // when
             shuffleDeckCommandHandler.handle(shuffleDeckCommand);
 
             // then
-            verify(deckRepository).save(spyedDeck);
+            verify(gameRepository).save(game);
         }
 
         @Test
