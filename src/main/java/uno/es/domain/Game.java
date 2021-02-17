@@ -40,4 +40,8 @@ public class Game {
     public List<Card> getDeckCards() {
         return deck.getCards();
     }
+
+    public Deck getDeck() {
+        return deck;
+    }
 }

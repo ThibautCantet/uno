@@ -1,6 +1,7 @@
-package uno.es;
+package uno.es.use_case;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,19 +16,17 @@ import io.cucumber.java.fr.Etque;
 import io.cucumber.java.fr.Quand;
 import uno.es.domain.Game;
 import uno.es.domain.Player;
-import uno.es.domain.game.Card;
-import uno.es.domain.game.CardDto;
-import uno.es.domain.game.CartNumber;
-import uno.es.domain.game.Color;
-import uno.es.domain.game.Deck;
-import uno.es.domain.game.DeckId;
-import uno.es.domain.game.InvalidCardException;
+import uno.es.domain.game.*;
+import uno.es.use_case.DistributeCommandHandler;
 
 public class DistributionATest {
 
     private Game game;
 
     private int numberOfPlayers;
+    private DistributeCommandHandler distributeCommandHandler;
+    private DeckRepository deckRepository;
+    private final DeckId deckId = new DeckId();
 
     @Etantdonné("une partie avec {int} joueurs")
     public void unePartieAvecJoueurs(int numberOfPlayers) {
@@ -43,7 +42,8 @@ public class DistributionATest {
 
     @Quand("je distribue {int} cartes")
     public void jeDistribueCartes(int numberOfDistributedCardsByPlayer) {
-        game.distribute(numberOfDistributedCardsByPlayer);
+        distributeCommandHandler.handle(new DistributeCommand(deckId));
+        // game.distribute(numberOfDistributedCardsByPlayer);
     }
 
     public CardDto buildCardDto(Map<String, String> entry) {
@@ -57,7 +57,9 @@ public class DistributionATest {
     @Alors("il ne reste plus que les cartes suivantes")
     public void ilNeRestePlusQueLesCartesSuivantes(DataTable dataTable) {
         List<Card> expectedCards = dataTableTransformEntries(dataTable, this::buildCard);
+
         assertThat(game.getDeckCards()).isEqualTo(expectedCards);
+        verify(deckRepository).save(game.getDeck());
     }
 
     public Card buildCard(Map<String, String> entry) {
