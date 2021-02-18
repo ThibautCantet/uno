@@ -21,7 +21,7 @@ class DeckUTest {
         @Test
         void initialize_new_aggregate_id() {
             // when
-            final Deck deck = Deck.createNewDeck(deckId);
+            final Deck deck = Deck.createNewDeck(deckId, Collections.emptyList());
 
             // then
             assertThat(deck.getId()).isEqualTo(deckId);
@@ -40,7 +40,6 @@ class DeckUTest {
             assertThat(deck.getCards().size()).isEqualTo(1);
             assertThat(deck.getCards()).containsExactly(expectedCard);
         }
-
     }
 
     @Nested
@@ -79,7 +78,7 @@ class DeckUTest {
         @Test
         void add_CardShuffledEvent_to_generatedEvents() {
             // given
-            final Deck deck = Deck.createNewDeck(deckId);
+            final Deck deck = Deck.createNewDeck(deckId, Collections.emptyList());
 
             // when
             deck.shuffle();
@@ -94,8 +93,10 @@ class DeckUTest {
         @Test
         void true_when_deck_contain_same_cards_in_same_order() {
             // given
-            final Deck deck1 = Deck.createNewDeck(deckId);
-            final Deck deck2 = Deck.createNewDeck(deckId);
+            List<CardDto> initialCards = Collections.singletonList(new CardDto(CartNumber.ZERO, Color.BLUE));
+
+            final Deck deck1 = Deck.createNewDeck(deckId, initialCards);
+            final Deck deck2 = Deck.createNewDeck(deckId, initialCards);
 
             // when
             final boolean areEqual = deck1.equals(deck2);
@@ -107,9 +108,10 @@ class DeckUTest {
         @Test
         void false_when_deck_contain_same_cards_in_different_order() {
             // given
-            final Deck deck1 = Deck.createNewDeck(deckId);
-            deck1.shuffle();
-            final Deck deck2 = Deck.createNewDeck(deckId);
+            List<CardDto> initialCards1 = Collections.singletonList(new CardDto(CartNumber.ZERO, Color.BLUE));
+            final Deck deck1 = Deck.createNewDeck(deckId, initialCards1);
+            List<CardDto> initialCards2 = Collections.singletonList(new CardDto(CartNumber.THREE, Color.BLUE));
+            final Deck deck2 = Deck.createNewDeck(deckId, initialCards2);
 
             // when
             final boolean areEqual = deck1.equals(deck2);

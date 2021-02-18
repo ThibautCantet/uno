@@ -94,10 +94,6 @@ public class Deck {
         return new Deck(deckId, cardDtos);
     }
 
-    public static Deck createNewDeck(DeckId deckId) {
-        return new Deck(deckId);
-    }
-
     public List<DeckEvent> getGeneratedEvents() {
         return getGeneratedEvents;
     }

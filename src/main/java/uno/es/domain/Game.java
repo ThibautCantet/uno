@@ -16,7 +16,7 @@ public class Game {
         this.numberOfPlayers = numberOfPlayers;
         this.players = new HashMap<>();
         for (int i = 1; i <= numberOfPlayers; i++) {
-            players.computeIfAbsent(i, playerId -> new Player(playerId));
+            players.computeIfAbsent(i, Player::new);
         }
         this.deck = deck;
     }
@@ -47,7 +47,7 @@ public class Game {
     }
 
     public void shuffle() {
-
+        deck.shuffle();
     }
 
     public GameId getId() {

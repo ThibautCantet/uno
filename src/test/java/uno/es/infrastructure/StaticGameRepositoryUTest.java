@@ -4,46 +4,49 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uno.es.domain.Game;
 import uno.es.domain.game.Deck;
-import uno.es.domain.game.DeckId;
 import uno.es.domain.game.DeckShuffledEvent;
+import uno.es.domain.game.GameId;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class StaticGameRepositoryUTest {
 
-    private StaticGameRepository staticDeckRepository;
+    private StaticGameRepository staticGameRepository;
 
     @BeforeEach
     void setUp() {
-        staticDeckRepository = new StaticGameRepository();
+        staticGameRepository = new StaticGameRepository();
     }
 
     @Test
-    void findNewDeck_should_return_new_deck() {
+    void find_should_return_deck() {
         // given
-        DeckId deckId = new DeckId();
-        Deck expectedDeck =  Deck.createNewDeck(deckId);
+        GameId gameId = new GameId();
+        Game expectedGame = mock(Game.class);
 
         // when
-        final Deck deck = staticDeckRepository.findNewDeck(deckId);
+        final Game game = staticGameRepository.find(gameId);
 
         // then
-        assertThat(deck).isEqualTo(expectedDeck);
+        assertThat(game).isEqualTo(expectedGame);
     }
 
     @Test
     void save_should_save_deck_events() {
         // given
         Game game = mock(Game.class);
+        final Deck deck = mock(Deck.class);
+        when(game.getDeck()).thenReturn(deck);
         final DeckShuffledEvent deckShuffledEvent = mock(DeckShuffledEvent.class);
         when(game.getDeck().getGeneratedEvents()).thenReturn(singletonList(deckShuffledEvent));
 
         // when
-        staticDeckRepository.save(game);
+        staticGameRepository.save(game);
 
         // then
-        assertThat(staticDeckRepository.getEvents()).usingFieldByFieldElementComparator().containsExactly(deckShuffledEvent);
+        assertThat(staticGameRepository.getEvents()).usingFieldByFieldElementComparator().containsExactly(deckShuffledEvent);
     }
 }

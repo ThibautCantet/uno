@@ -32,8 +32,7 @@ class GetGameQueryHandlerUTest {
             GameId gameId = new GameId(UUID.randomUUID());
             getGameQuery = new GetGameQuery(gameId);
 
-            final Game game = mock(Game.class);//Deck.createNewDeck(gameId);
-            //game.shuffle();
+            final Game game = mock(Game.class);
 
             when(gameRepository.find(gameId)).thenReturn(game);
         }
@@ -56,7 +55,7 @@ class GetGameQueryHandlerUTest {
     class ListenToShouldReturn {
 
         @Test
-        void getShuffledDeckQuery() {
+        void getGetGameQuery() {
             // when
             Class result = getGameQueryHandler.listenTo();
 

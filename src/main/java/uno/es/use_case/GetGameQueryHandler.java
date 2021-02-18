@@ -14,7 +14,8 @@ public class GetGameQueryHandler implements QueryHandler<QueryResponse<Game>, Ge
     }
 
     public QueryResponse<Game> handle(GetGameQuery query) {
-        return null; //new QueryResponse<>(deckRepository.find(query.getGameId()));
+        final Game game = gameRepository.find(query.getGameId());
+        return new QueryResponse<>(game);
     }
 
     @Override

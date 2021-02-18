@@ -1,39 +1,27 @@
 package uno.es.use_case;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.fr.Alors;
-import io.cucumber.java.fr.Et;
-import io.cucumber.java.fr.Etantdonné;
-import io.cucumber.java.fr.Etque;
-import io.cucumber.java.fr.Quand;
-import org.junit.Before;
+import io.cucumber.java.fr.*;
 import uno.es.domain.Game;
 import uno.es.domain.Player;
 import uno.es.domain.ddd.QueryResponse;
 import uno.es.domain.game.*;
 import uno.es.infrastructure.StaticGameRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class DistributionATest {
 
     private int numberOfPlayers;
-    private DistributeCommandHandler distributeCommandHandler;
-    private StaticGameRepository deckRepository;
+    private final StaticGameRepository deckRepository = new StaticGameRepository();
+    private final DistributeCommandHandler distributeCommandHandler = new DistributeCommandHandler(deckRepository);
     private final GameId gameId = new GameId();
     private final DeckId deckId = new DeckId();
-
-    @Before
-    public void setUp() {
-        deckRepository = new StaticGameRepository();
-        distributeCommandHandler = new DistributeCommandHandler(deckRepository);
-    }
 
     @Etantdonné("une partie avec {int} joueurs")
     public void unePartieAvecJoueurs(int numberOfPlayers) {
