@@ -3,9 +3,10 @@ package uno.es.infrastructure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uno.es.domain.Game;
-import uno.es.domain.game.Deck;
-import uno.es.domain.game.DeckShuffledEvent;
-import uno.es.domain.game.GameId;
+import uno.es.domain.game.*;
+
+import java.util.List;
+import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,10 +23,17 @@ class StaticGameRepositoryUTest {
     }
 
     @Test
-    void find_should_return_deck() {
+    void find_should_return_deck() throws InvalidDeckIdException {
         // given
-        GameId gameId = new GameId();
-        Game expectedGame = mock(Game.class);
+        final SimpleDeckCreated simpleDeckCreated = new SimpleDeckCreated();
+        final List<CardDto> cardDtos = simpleDeckCreated.getCardDtos();
+
+        final GameId gameId = simpleDeckCreated.getGameId();
+
+        final DeckId deckId = new DeckId(UUID.randomUUID());
+        final Deck deck = new Deck(gameId, deckId, cardDtos);
+
+        final Game expectedGame = new Game(3, deck);
 
         // when
         final Game game = staticGameRepository.find(gameId);

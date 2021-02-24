@@ -37,7 +37,7 @@ public class DistributionATest {
     @Etque("le jeu de carte simple est mélangé")
     public void leJeuDeCarteSimpleEstMélangé(DataTable dataTable) {
         List<Card> cards = dataTableTransformEntries(dataTable, this::buildCard);
-        DeckShuffledEvent deckShuffledEvent = new DeckShuffledEvent(deckId, cards);
+        DeckShuffledEvent deckShuffledEvent = new DeckShuffledEvent(gameId, deckId, cards);
         deckRepository.addEvent(deckShuffledEvent);
     }
 

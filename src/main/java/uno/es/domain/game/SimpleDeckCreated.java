@@ -5,6 +5,7 @@ import java.util.List;
 
 public class SimpleDeckCreated implements DeckEvent {
     private final List<CardDto> cardDtos;
+    private final GameId gameId = new GameId();
 
     public SimpleDeckCreated() {
         cardDtos = initializeCards();
@@ -98,5 +99,10 @@ public class SimpleDeckCreated implements DeckEvent {
 
     public List<CardDto> getCardDtos() {
         return cardDtos;
+    }
+
+    @Override
+    public GameId getGameId() {
+        return gameId;
     }
 }

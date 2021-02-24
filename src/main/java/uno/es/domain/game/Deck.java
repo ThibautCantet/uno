@@ -13,6 +13,7 @@ public class Deck {
     private final Stack<Card> cards;
     private final DeckId deckId;
     private final List<DeckEvent> getGeneratedEvents = new ArrayList<>();
+    private GameId gameId;
 
     private Deck(DeckId deckId) {
         this.deckId = deckId;
@@ -22,7 +23,8 @@ public class Deck {
         addOneToNineCards();
     }
 
-    public Deck(DeckId deckId, List<CardDto> cardDtos) {
+    public Deck(GameId gameId, DeckId deckId, List<CardDto> cardDtos) {
+        this.gameId = gameId;
         this.deckId = deckId;
         this.cards = initializeCards(cardDtos);
     }
@@ -87,11 +89,11 @@ public class Deck {
         this.cards.clear();
         this.cards.addAll(shuffledCards);
 
-        getGeneratedEvents.add(new DeckShuffledEvent(deckId, cards));
+        getGeneratedEvents.add(new DeckShuffledEvent(gameId, deckId, cards));
     }
 
-    public static Deck createNewDeck(DeckId deckId, List<CardDto> cardDtos) {
-        return new Deck(deckId, cardDtos);
+    public static Deck createNewDeck(DeckId deckId, List<CardDto> cardDtos, GameId gameId) {
+        return new Deck(gameId, deckId, cardDtos);
     }
 
     public List<DeckEvent> getGeneratedEvents() {

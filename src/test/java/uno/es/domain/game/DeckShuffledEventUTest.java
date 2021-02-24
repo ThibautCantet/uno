@@ -13,10 +13,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DeckShuffledEventUTest {
     private List<Card> cards;
     private DeckId deckId;
+    private GameId gameId;
 
     @BeforeEach
     void setUp() throws InvalidCardException {
         deckId = new DeckId();
+        gameId = new GameId();
         cards = asList(
                 new Card(CartNumber.ONE, Color.RED),
                 new Card(CartNumber.TWO, Color.RED)
@@ -28,7 +30,7 @@ class DeckShuffledEventUTest {
         @Test
         void bind_deckId() {
             // given
-            final DeckShuffledEvent deckShuffledEvent = new DeckShuffledEvent(deckId, cards);
+            final DeckShuffledEvent deckShuffledEvent = new DeckShuffledEvent(gameId, deckId, cards);
 
             // then
             assertThat(deckShuffledEvent.getDeckId()).isEqualTo(deckId);
@@ -37,7 +39,7 @@ class DeckShuffledEventUTest {
         @Test
         void bind_cardNumber() {
             // given
-            final DeckShuffledEvent deckShuffledEvent = new DeckShuffledEvent(deckId, cards);
+            final DeckShuffledEvent deckShuffledEvent = new DeckShuffledEvent(gameId, deckId, cards);
 
             // then
             assertThat(deckShuffledEvent.getCards()).isEqualTo(cards);
@@ -49,8 +51,8 @@ class DeckShuffledEventUTest {
         @Test
         void true_when_deckId_and_card_and_position_are_the_same() {
             // given
-            final DeckShuffledEvent card1 = new DeckShuffledEvent(deckId, cards);
-            final DeckShuffledEvent card2 = new DeckShuffledEvent(deckId, cards);
+            final DeckShuffledEvent card1 = new DeckShuffledEvent(gameId, deckId, cards);
+            final DeckShuffledEvent card2 = new DeckShuffledEvent(gameId, deckId, cards);
 
             // when
             final boolean areEqual = card1.equals(card2);
@@ -64,8 +66,8 @@ class DeckShuffledEventUTest {
             @Test
             void deckId_are_different_and_cards_are_the_same() {
                 // given
-                final DeckShuffledEvent card1 = new DeckShuffledEvent(new DeckId(), cards);
-                final DeckShuffledEvent card2 = new DeckShuffledEvent(new DeckId(), cards);
+                final DeckShuffledEvent card1 = new DeckShuffledEvent(gameId, new DeckId(), cards);
+                final DeckShuffledEvent card2 = new DeckShuffledEvent(gameId, new DeckId(), cards);
 
                 // when
                 final boolean areEqual = card1.equals(card2);
@@ -77,8 +79,8 @@ class DeckShuffledEventUTest {
             @Test
             void cards_are_different_and_deckId_are_the_same() throws InvalidCardException {
                 // given
-                final DeckShuffledEvent card1 = new DeckShuffledEvent(deckId, Collections.singletonList(new Card(CartNumber.SEVEN, Color.RED)));
-                final DeckShuffledEvent card2 = new DeckShuffledEvent(deckId, Collections.singletonList(new Card(CartNumber.ZERO, Color.BLUE)));
+                final DeckShuffledEvent card1 = new DeckShuffledEvent(gameId, deckId, Collections.singletonList(new Card(CartNumber.SEVEN, Color.RED)));
+                final DeckShuffledEvent card2 = new DeckShuffledEvent(gameId, deckId, Collections.singletonList(new Card(CartNumber.ZERO, Color.BLUE)));
 
                 // when
                 final boolean areEqual = card1.equals(card2);

@@ -18,15 +18,17 @@ public class DeckATest {
 
     private Deck deck;
     private SimpleDeckCreated simpleDeckCreated;
+    private GameId gameId;
 
     @Etque("le jeu de carte simple est neuf")
     public void leJeuDeCarteSimpleEstNeuf() {
         simpleDeckCreated = new SimpleDeckCreated();
+        gameId = simpleDeckCreated.getGameId();
     }
 
     @Quand("je récupère le paquet de cartes")
     public void jeRécupèreLePaquetDeCarte() {
-        deck = Deck.createNewDeck(new DeckId(), simpleDeckCreated.getCardDtos());
+        deck = Deck.createNewDeck(new DeckId(), simpleDeckCreated.getCardDtos(), gameId);
     }
 
     @Alors("il doit être trié par couleur et ordre croissant")
