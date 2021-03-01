@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DeckUTest {
 
-    private final DeckId deckId = new DeckId();
     private final GameId gameId = new GameId();
 
     @Nested
@@ -22,10 +21,10 @@ class DeckUTest {
         @Test
         void initialize_new_aggregate_id() {
             // when
-            final Deck deck = Deck.createNewDeck(deckId, Collections.emptyList(), gameId);
+            final Deck deck = Deck.createNewDeck(Collections.emptyList(), gameId);
 
             // then
-            assertThat(deck.getId()).isEqualTo(deckId);
+            assertThat(deck.getGameId()).isEqualTo(gameId);
         }
 
         @Test
@@ -35,7 +34,7 @@ class DeckUTest {
             final Card expectedCard = new Card(CartNumber.ZERO, Color.BLUE);
 
             // when
-            final Deck deck = Deck.createNewDeck(deckId, initialeCards, gameId);
+            final Deck deck = Deck.createNewDeck(initialeCards, gameId);
 
             // then
             assertThat(deck.getCards().size()).isEqualTo(1);
@@ -55,7 +54,7 @@ class DeckUTest {
                     new CardDto(CartNumber.THREE, Color.BLUE),
                     new CardDto(CartNumber.FOUR, Color.BLUE)
             );
-            final Deck deck = Deck.createNewDeck(deckId, initialeCards, gameId);
+            final Deck deck = Deck.createNewDeck(initialeCards, gameId);
             Stack<Card> expectedCards = new Stack<>();
             expectedCards.addAll(asList(
                     new Card(CartNumber.ZERO, Color.BLUE),
@@ -79,13 +78,13 @@ class DeckUTest {
         @Test
         void add_CardShuffledEvent_to_generatedEvents() {
             // given
-            final Deck deck = Deck.createNewDeck(deckId, Collections.emptyList(), gameId);
+            final Deck deck = Deck.createNewDeck(Collections.emptyList(), gameId);
 
             // when
             deck.shuffle();
 
             // then
-            assertThat(deck.getGeneratedEvents()).usingFieldByFieldElementComparator().containsExactly(new DeckShuffledEvent(gameId, deckId, deck.getCards()));
+            assertThat(deck.getGeneratedEvents()).usingFieldByFieldElementComparator().containsExactly(new DeckShuffledEvent(gameId, deck.getCards()));
         }
     }
 
@@ -96,8 +95,8 @@ class DeckUTest {
             // given
             List<CardDto> initialCards = Collections.singletonList(new CardDto(CartNumber.ZERO, Color.BLUE));
 
-            final Deck deck1 = Deck.createNewDeck(deckId, initialCards, gameId);
-            final Deck deck2 = Deck.createNewDeck(deckId, initialCards, gameId);
+            final Deck deck1 = Deck.createNewDeck(initialCards, gameId);
+            final Deck deck2 = Deck.createNewDeck(initialCards, gameId);
 
             // when
             final boolean areEqual = deck1.equals(deck2);
@@ -110,9 +109,9 @@ class DeckUTest {
         void false_when_deck_contain_same_cards_in_different_order() {
             // given
             List<CardDto> initialCards1 = Collections.singletonList(new CardDto(CartNumber.ZERO, Color.BLUE));
-            final Deck deck1 = Deck.createNewDeck(deckId, initialCards1, gameId);
+            final Deck deck1 = Deck.createNewDeck(initialCards1, gameId);
             List<CardDto> initialCards2 = Collections.singletonList(new CardDto(CartNumber.THREE, Color.BLUE));
-            final Deck deck2 = Deck.createNewDeck(deckId, initialCards2, gameId);
+            final Deck deck2 = Deck.createNewDeck(initialCards2, gameId);
 
             // when
             final boolean areEqual = deck1.equals(deck2);
@@ -136,7 +135,7 @@ class DeckUTest {
                 new CardDto(CartNumber.SEVEN, Color.BLUE),
                 new CardDto(CartNumber.EIGHT, Color.BLUE)
         );
-        final Deck deck = Deck.createNewDeck(deckId, initialeCards, gameId);
+        final Deck deck = Deck.createNewDeck(initialeCards, gameId);
 
         // when
         deck.distribute(2, 3);

@@ -1,8 +1,10 @@
 package uno.es.infrastructure;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uno.es.domain.Game;
+import uno.es.domain.game.PlayerAdded;
 import uno.es.domain.game.*;
 
 import java.util.List;
@@ -23,23 +25,35 @@ class StaticGameRepositoryUTest {
     }
 
     @Test
-    void find_should_return_deck() throws InvalidDeckIdException {
+    void find_should_return_deck() {
         // given
+        staticGameRepository.addEvent(new SimpleDeckCreated());
+
         final SimpleDeckCreated simpleDeckCreated = new SimpleDeckCreated();
-        final List<CardDto> cardDtos = simpleDeckCreated.getCardDtos();
+        staticGameRepository.addEvent(simpleDeckCreated);
 
         final GameId gameId = simpleDeckCreated.getGameId();
 
-        final DeckId deckId = new DeckId(UUID.randomUUID());
-        final Deck deck = new Deck(gameId, deckId, cardDtos);
+        final PlayerAdded player1Added = new PlayerAdded(gameId);
+        final PlayerAdded player2Added = new PlayerAdded(gameId);
+        final PlayerAdded player3Added = new PlayerAdded(gameId);
 
-        final Game expectedGame = new Game(3, deck);
+        staticGameRepository.addEvent(player1Added);
+        staticGameRepository.addEvent(player2Added);
+        staticGameRepository.addEvent(player3Added);
 
         // when
         final Game game = staticGameRepository.find(gameId);
 
         // then
-        assertThat(game).isEqualTo(expectedGame);
+        final List<CardDto> cardDtos = simpleDeckCreated.getCardDtos();
+
+        final Deck deck = new Deck(gameId, cardDtos);
+
+        final int numberOfPlayersAdded = 3;
+
+        final Game expectedGame = new Game(numberOfPlayersAdded, deck);
+        assertThat(game).usingRecursiveComparison().isEqualTo(expectedGame);
     }
 
     @Test

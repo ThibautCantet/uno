@@ -3,7 +3,7 @@ package uno.es.domain.game;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleDeckCreated implements DeckEvent {
+public class SimpleDeckCreated implements GameEvent {
     private final List<CardDto> cardDtos;
     private final GameId gameId = new GameId();
 

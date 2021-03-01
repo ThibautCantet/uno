@@ -11,21 +11,18 @@ import static java.util.Arrays.asList;
 public class Deck {
 
     private final Stack<Card> cards;
-    private final DeckId deckId;
-    private final List<DeckEvent> getGeneratedEvents = new ArrayList<>();
+    private final List<GameEvent> getGeneratedEvents = new ArrayList<>();
     private GameId gameId;
 
-    private Deck(DeckId deckId) {
-        this.deckId = deckId;
+    private Deck() {
         this.cards = new Stack<>();
         addZeroCards(CartNumber.ZERO);
         addOneToNineCards();
         addOneToNineCards();
     }
 
-    public Deck(GameId gameId, DeckId deckId, List<CardDto> cardDtos) {
+    public Deck(GameId gameId, List<CardDto> cardDtos) {
         this.gameId = gameId;
-        this.deckId = deckId;
         this.cards = initializeCards(cardDtos);
     }
 
@@ -57,12 +54,12 @@ public class Deck {
         cards.addAll(asList(redCard, greenCard, bleuCard, yellowCard));
     }
 
-    public Stack<Card> getCards() {
-        return cards;
+    public GameId getGameId() {
+        return gameId;
     }
 
-    public DeckId getId() {
-        return deckId;
+    public Stack<Card> getCards() {
+        return cards;
     }
 
     @Override
@@ -89,14 +86,14 @@ public class Deck {
         this.cards.clear();
         this.cards.addAll(shuffledCards);
 
-        getGeneratedEvents.add(new DeckShuffledEvent(gameId, deckId, cards));
+        getGeneratedEvents.add(new DeckShuffledEvent(gameId, cards));
     }
 
-    public static Deck createNewDeck(DeckId deckId, List<CardDto> cardDtos, GameId gameId) {
-        return new Deck(gameId, deckId, cardDtos);
+    public static Deck createNewDeck(List<CardDto> cardDtos, GameId gameId) {
+        return new Deck(gameId, cardDtos);
     }
 
-    public List<DeckEvent> getGeneratedEvents() {
+    public List<GameEvent> getGeneratedEvents() {
         return getGeneratedEvents;
     }
 

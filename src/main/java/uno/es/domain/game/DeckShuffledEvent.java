@@ -3,20 +3,14 @@ package uno.es.domain.game;
 import java.util.List;
 import java.util.Objects;
 
-public class DeckShuffledEvent implements DeckEvent {
+public class DeckShuffledEvent implements GameEvent {
 
-    private final DeckId deckId;
     private final List<Card> cards;
     private final GameId gameId;
 
-    public DeckShuffledEvent(GameId gameId, DeckId deckId, List<Card> cards) {
-        this.deckId = deckId;
+    public DeckShuffledEvent(GameId gameId, List<Card> cards) {
         this.cards = cards;
         this.gameId = gameId;
-    }
-
-    public DeckId getDeckId() {
-        return deckId;
     }
 
     public List<Card> getCards() {
@@ -28,7 +22,7 @@ public class DeckShuffledEvent implements DeckEvent {
         if (this == o) return true;
         if (!(o instanceof DeckShuffledEvent)) return false;
         DeckShuffledEvent event2 = (DeckShuffledEvent) o;
-        return Objects.equals(deckId, event2.deckId) && Objects.equals(cards, event2.cards);
+        return Objects.equals(gameId, event2.gameId) && Objects.equals(cards, event2.cards);
     }
 
     @Override
