@@ -5,6 +5,7 @@ import uno.es.domain.game.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class StaticGameRepository implements GameRepository {
@@ -17,19 +18,37 @@ public class StaticGameRepository implements GameRepository {
 
     @Override
     public Game find(GameId gameId) {
-        int numberOfPlayersAdded = (int) events.stream()
+        int numberOfPlayersAdded = initializeNumberOfPlayersAdded(gameId);
+
+        final List<CardDto> allSimpleDeckCardDtos = initializeCardDtos(gameId);
+
+        final Deck deck = new Deck(gameId, allSimpleDeckCardDtos);
+
+        return new Game(numberOfPlayersAdded, deck);
+    }
+
+    private int initializeNumberOfPlayersAdded(GameId gameId) {
+        return (int) events.stream()
         .filter(gameEvent -> gameEvent.getGameId().equals(gameId))
         .filter(gameEvent -> gameEvent instanceof PlayerAdded)
         .count();
+    }
 
+    private List<CardDto> initializeCardDtos(GameId gameId) {
         final GameEvent simpleDeckCreated = events.stream()
                 .filter(gameEvent -> gameEvent.getGameId().equals(gameId))
                 .filter(gameEvent -> gameEvent instanceof SimpleDeckCreated)
                 .findFirst().get();
         final List<CardDto> cardDtos = ((SimpleDeckCreated) simpleDeckCreated).getCardDtos();
-        final Deck deck = new Deck(gameId, cardDtos);
 
-        return new Game(numberOfPlayersAdded, deck);
+        final List<CardDto> distributedCards = events.stream()
+                .filter(gameEvent -> gameEvent instanceof CardDistributed)
+                .map(gameEvent -> ((CardDistributed) gameEvent).getCard())
+                .map(card -> new CardDto(card.getCartNumber(), card.getColor()))
+                .collect(Collectors.toList());
+
+        cardDtos.removeAll(distributedCards);
+        return cardDtos;
     }
 
     List<GameEvent> getEvents() {

@@ -3,6 +3,7 @@ package uno.es.domain;
 import uno.es.domain.game.Card;
 import uno.es.domain.game.Deck;
 import uno.es.domain.game.GameId;
+import uno.es.domain.game.PlayerAdded;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Game {
     public void distribute(int numberOfDistributedCardsByPlayer) {
         for (int distributedCardIndex = 1; distributedCardIndex <= numberOfDistributedCardsByPlayer; distributedCardIndex++) {
             for (int player = 1; player <= numberOfPlayers; player++) {
-                final Card card = this.deck.pop();
+                final Card card = this.deck.pop(player);
                 getCurrentPlayer(player).addCard(card);
             }
         }
@@ -52,5 +53,11 @@ public class Game {
 
     public GameId getId() {
         return null;
+    }
+
+    public void addPlayer(GameId gameId) {
+        final int playerId = players.size() + 1;
+        players.put(playerId, new Player(playerId));
+        deck.getGeneratedEvents().add(new PlayerAdded(gameId));
     }
 }

@@ -11,15 +11,8 @@ import static java.util.Arrays.asList;
 public class Deck {
 
     private final Stack<Card> cards;
-    private final List<GameEvent> getGeneratedEvents = new ArrayList<>();
-    private GameId gameId;
-
-    private Deck() {
-        this.cards = new Stack<>();
-        addZeroCards(CartNumber.ZERO);
-        addOneToNineCards();
-        addOneToNineCards();
-    }
+    private final List<GameEvent> generatedEvents = new ArrayList<>();
+    private final GameId gameId;
 
     public Deck(GameId gameId, List<CardDto> cardDtos) {
         this.gameId = gameId;
@@ -86,7 +79,7 @@ public class Deck {
         this.cards.clear();
         this.cards.addAll(shuffledCards);
 
-        getGeneratedEvents.add(new DeckShuffledEvent(gameId, cards));
+        generatedEvents.add(new DeckShuffledEvent(gameId, cards));
     }
 
     public static Deck createNewDeck(List<CardDto> cardDtos, GameId gameId) {
@@ -94,7 +87,7 @@ public class Deck {
     }
 
     public List<GameEvent> getGeneratedEvents() {
-        return getGeneratedEvents;
+        return generatedEvents;
     }
 
     public void distribute(int numberOfDistributedCardsByPlayer, int numberOfPlayers) {
@@ -105,7 +98,9 @@ public class Deck {
         }
     }
 
-    public Card pop() {
-        return this.cards.pop();
+    public Card pop(int player) {
+        final Card distributedCard = this.cards.pop();
+        generatedEvents.add(new CardDistributed(distributedCard, player, this.gameId));
+        return distributedCard;
     }
 }

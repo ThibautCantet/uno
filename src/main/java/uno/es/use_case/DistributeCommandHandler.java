@@ -1,5 +1,6 @@
 package uno.es.use_case;
 
+import uno.es.domain.Game;
 import uno.es.domain.ddd.CommandHandler;
 import uno.es.domain.ddd.CommandResponse;
 import uno.es.domain.game.GameRepository;
@@ -14,11 +15,11 @@ public class DistributeCommandHandler implements CommandHandler<CommandResponse<
 
     @Override
     public CommandResponse<Void> handle(DistributeCommand command) {
-        // final Deck deck = deckRepository.findNewDeck(command.getGameId());
+        final Game game = gameRepository.find(command.getGameId());
 
-        // deck.shuffle();
+        game.distribute(command.getNumberOfDistributedCardsByPlayer());
 
-        // deckRepository.save(deck);
+        gameRepository.save(game);
 
         return new CommandResponse<>();
     }

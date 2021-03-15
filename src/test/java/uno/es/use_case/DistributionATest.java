@@ -18,43 +18,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DistributionATest {
 
     private int numberOfPlayers;
-    private final StaticGameRepository deckRepository = new StaticGameRepository();
-    private final DistributeCommandHandler distributeCommandHandler = new DistributeCommandHandler(deckRepository);
-    private final GameId gameId = new GameId();
-    private final DeckId deckId = new DeckId();
+    private final StaticGameRepository staticGameRepository = new StaticGameRepository();
+    private final DistributeCommandHandler distributeCommandHandler = new DistributeCommandHandler(staticGameRepository);
+    private GameId gameId;
 
     @Etantdonné("une partie avec {int} joueurs")
     public void unePartieAvecJoueurs(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
+        final AddPlayersCommand addPlayersCommand = new AddPlayersCommand(numberOfPlayers, gameId);
+        final AddPlayersCommandHandler addPlayersCommandHandler = new AddPlayersCommandHandler(staticGameRepository);
+        addPlayersCommandHandler.handle(addPlayersCommand);
     }
 
     @Et("le jeu de carte simple est neuf trié")
     public void leJeuDeCarteSimpleEstNeufTrié() {
         SimpleDeckCreated simpleDeckCreated = new SimpleDeckCreated();
-        deckRepository.addEvent(simpleDeckCreated);
+        gameId = simpleDeckCreated.getGameId();
+        staticGameRepository.addEvent(simpleDeckCreated);
     }
 
     @Etque("le jeu de carte simple est mélangé")
     public void leJeuDeCarteSimpleEstMélangé(DataTable dataTable) {
         List<Card> cards = dataTableTransformEntries(dataTable, this::buildCard);
         DeckShuffledEvent deckShuffledEvent = new DeckShuffledEvent(gameId, cards);
-        deckRepository.addEvent(deckShuffledEvent);
+        staticGameRepository.addEvent(deckShuffledEvent);
     }
 
     @Quand("je distribue {int} cartes")
     public void jeDistribueCartes(int numberOfDistributedCardsByPlayer) {
         distributeCommandHandler.handle(new DistributeCommand(gameId, numberOfPlayers, numberOfDistributedCardsByPlayer));
-        // game.distribute(numberOfDistributedCardsByPlayer);
     }
 
     @Alors("il ne reste plus que les cartes suivantes")
     public void ilNeRestePlusQueLesCartesSuivantes(DataTable dataTable) {
-        GetGameQueryHandler getGameQueryHandler = new GetGameQueryHandler(deckRepository);
+        GetGameQueryHandler getGameQueryHandler = new GetGameQueryHandler(staticGameRepository);
         final QueryResponse<Game> queryResponse = getGameQueryHandler.handle(new GetGameQuery(gameId));
 
         List<Card> expectedCards = dataTableTransformEntries(dataTable, this::buildCard);
 
         final Game game = queryResponse.getValue();
+        assertThat(game.getDeckCards().size()).isEqualTo(55);
         assertThat(game.getDeckCards()).isEqualTo(expectedCards);
         //verify(deckRepository).save(game.getDeck());
     }
@@ -65,7 +68,7 @@ public class DistributionATest {
 
     @Et("le joueur {int} a les cartes suivantes")
     public void leJoueurALesCartesSuivantes(int playerId, DataTable dataTable) {
-        GetGameQueryHandler getGameQueryHandler = new GetGameQueryHandler(deckRepository);
+        GetGameQueryHandler getGameQueryHandler = new GetGameQueryHandler(staticGameRepository);
         final QueryResponse<Game> queryResponse = getGameQueryHandler.handle(new GetGameQuery(gameId));
         final Game game = queryResponse.getValue();
 

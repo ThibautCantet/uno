@@ -84,8 +84,8 @@ Fonctionnalité: Gestion du paquet de cartes
       | GREEN  | NINE  |
 
   Scénario: Distribution des cartes
-    Etant donné une partie avec 3 joueurs
-    Et le jeu de carte simple est neuf trié
+    Etant donné que le jeu de carte simple est neuf trié
+    Et une partie avec 3 joueurs
     Et le jeu de carte simple est mélangé
       | color  | value |
       | BLUE   | ONE   |

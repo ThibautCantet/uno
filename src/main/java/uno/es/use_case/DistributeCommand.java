@@ -17,4 +17,8 @@ public class DistributeCommand implements Command {
     public GameId getGameId() {
         return gameId;
     }
+
+    public int getNumberOfDistributedCardsByPlayer() {
+        return numberOfDistributedCardsByPlayer;
+    }
 }
