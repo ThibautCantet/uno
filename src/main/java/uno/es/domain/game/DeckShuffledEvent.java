@@ -2,19 +2,21 @@ package uno.es.domain.game;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class DeckShuffledEvent implements GameEvent {
 
-    private final List<Card> cards;
+    private final List<CardDto> cardDtos;
     private final GameId gameId;
 
     public DeckShuffledEvent(GameId gameId, List<Card> cards) {
-        this.cards = cards;
+        this.cardDtos = cards.stream() .map(card -> new CardDto(card.getCartNumber(), card.getColor()))
+                .collect(Collectors.toList());;
         this.gameId = gameId;
     }
 
-    public List<Card> getCards() {
-        return cards;
+    public List<CardDto> getCardDtos() {
+        return cardDtos;
     }
 
     @Override
@@ -22,7 +24,7 @@ public class DeckShuffledEvent implements GameEvent {
         if (this == o) return true;
         if (!(o instanceof DeckShuffledEvent)) return false;
         DeckShuffledEvent event2 = (DeckShuffledEvent) o;
-        return Objects.equals(gameId, event2.gameId) && Objects.equals(cards, event2.cards);
+        return Objects.equals(gameId, event2.gameId) && Objects.equals(cardDtos, event2.cardDtos);
     }
 
     @Override

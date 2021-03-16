@@ -40,7 +40,7 @@ class DeckShuffledEventUTest {
             final DeckShuffledEvent deckShuffledEvent = new DeckShuffledEvent(gameId, cards);
 
             // then
-            assertThat(deckShuffledEvent.getCards()).isEqualTo(cards);
+            assertThat(deckShuffledEvent.getCardDtos()).isEqualTo(cards);
         }
     }
 

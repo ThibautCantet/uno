@@ -5,6 +5,7 @@ import uno.es.domain.game.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -29,9 +30,9 @@ public class StaticGameRepository implements GameRepository {
 
     private int initializeNumberOfPlayersAdded(GameId gameId) {
         return (int) events.stream()
-        .filter(gameEvent -> gameEvent.getGameId().equals(gameId))
-        .filter(gameEvent -> gameEvent instanceof PlayerAdded)
-        .count();
+                .filter(gameEvent -> gameEvent.getGameId().equals(gameId))
+                .filter(gameEvent -> gameEvent instanceof PlayerAdded)
+                .count();
     }
 
     private List<CardDto> initializeCardDtos(GameId gameId) {
@@ -41,14 +42,36 @@ public class StaticGameRepository implements GameRepository {
                 .findFirst().get();
         final List<CardDto> cardDtos = ((SimpleDeckCreated) simpleDeckCreated).getCardDtos();
 
-        final List<CardDto> distributedCards = events.stream()
+        List<CardDto> shuffledCardDtos = cardDtos;
+        final Optional<GameEvent> optionalDeckShuffledEvent = events.stream()
+                .filter(gameEvent -> gameEvent.getGameId().equals(gameId))
+                .filter(gameEvent -> gameEvent instanceof DeckShuffledEvent)
+                .findFirst();
+        if (optionalDeckShuffledEvent.isPresent()) {
+            shuffledCardDtos = ((DeckShuffledEvent) optionalDeckShuffledEvent.get()).getCardDtos();
+        }
+
+        final List<CardDto> distributedCardDtos = events.stream()
                 .filter(gameEvent -> gameEvent instanceof CardDistributed)
                 .map(gameEvent -> ((CardDistributed) gameEvent).getCard())
                 .map(card -> new CardDto(card.getCartNumber(), card.getColor()))
                 .collect(Collectors.toList());
 
-        cardDtos.removeAll(distributedCards);
-        return cardDtos;
+        return removeDistributedCards(shuffledCardDtos, distributedCardDtos);
+    }
+
+    private List<CardDto> removeDistributedCards(List<CardDto> shuffledCardDtos, List<CardDto> distributedCardDtos) {
+        List<CardDto> result = shuffledCardDtos;
+        for (CardDto distributedCardDto : distributedCardDtos) {
+            for (int i = 0; i < result.size(); i++) {
+                CardDto shuffledCartDto = result.get(i);
+                if (shuffledCartDto.equals(distributedCardDto)) {
+                    result.remove(i);
+                }
+            }
+        }
+
+        return result;
     }
 
     List<GameEvent> getEvents() {
